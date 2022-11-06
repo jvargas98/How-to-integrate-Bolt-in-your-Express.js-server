@@ -216,3 +216,21 @@ const config = (expressApp) => {
 
 module.exports = { config };
 ```
+
+Now we have to add the endpoints for our handlers, for that we go to the `bolt/receiver.js` file and add them in the `endpoints` property, then we also need to add the verification of the requests coming from slack for that we add the `signingSecret` property
+
+```
+const { ExpressReceiver } = require('@slack/bolt')
+
+const receiver = (expressApp) => {
+  return new ExpressReceiver({
+    app: expressApp,
+    signingSecret: process.env.SLACK_SIGNING_SECRET,
+    endpoints: {
+      events: '/slack/events',
+    },
+  });
+};
+
+module.exports = receiver;
+```
