@@ -234,3 +234,23 @@ const receiver = (expressApp) => {
 
 module.exports = receiver;
 ```
+
+Finally, we need to add the values for the environment variables, these values are found in [your app management](https://api.slack.com/apps) page of your slack application in the Basic Information tab. Once we get them we paste them into the `.env` file
+
+![Screen Shot 2022-11-06 at 2 52 15 p m](https://user-images.githubusercontent.com/36525675/200194567-bd4d4c5f-2404-48c6-be29-7237568d2d30.png)
+
+We did it! Our server is ready to receive requests from Slack or from any other party, to start receiving we execute the following to start the server and try
+
+```
+npm run start
+```
+
+We add our slack app to a channel and add a new person to the channel too and it works!
+
+![Screen Shot 2022-11-06 at 3 00 33 p m](https://user-images.githubusercontent.com/36525675/200194902-a79ad41e-52d1-48ea-bd41-8f872952393a.png)
+
+And it also works if we make a request from the browser to the http://localhost:3000/
+
+![Screen Shot 2022-11-06 at 3 05 41 p m](https://user-images.githubusercontent.com/36525675/200195137-178a4dcb-eafd-466d-ad66-fb2b358595f3.png)
+
+
