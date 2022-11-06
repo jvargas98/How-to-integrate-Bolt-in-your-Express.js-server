@@ -132,7 +132,7 @@ app.listen(port, () => {
 });
 ```
 
-We are already passing our instance of Express to Bolt, now we need to tell Bolt to use this instance of Express to receive https requests instead of using the instance that uses its default framework, for that we will go to the file `bolt/receiver.js` in this file we will import from Bolt the `ExpressReceiver` function, once imported we will call it passing an object with the `app` property where its value is our instance of Express.
+We are already passing our instance of Express to Bolt, now we need to tell Bolt to use this instance of Express to receive https requests instead of using the instance that uses its default framework, for that we will go to the file `bolt/receiver.js` in this file we will import from Bolt the `ExpressReceiver` function, once imported we will call it passing an object with the `app` property where its value is our instance of Express
 
 ```
 const { ExpressReceiver } = require('@slack/bolt')
@@ -144,4 +144,75 @@ const receiver = (expressApp) => {
 };
 
 module.exports = receiver;
+```
+
+Now that we have our `ExpressReceiver` we need to integrate it to our Bolt application, for that we will go to the `bolt/index.js` file and import our `ExpressReceiver`, once imported we will pass it to the object of our Bolt application in a new property named `receiver`
+
+```
+const { App } = require('@slack/bolt')
+const receiver = require("./receiver");
+
+const config = (expressApp) => {
+  const boltApp = new App({
+    receiver: receiver(expressApp),
+    token: process.env.SLACK_BOT_TOKEN,
+    appToken: process.env.SLACK_APP_TOKEN,
+  });
+};
+
+module.exports = { config };
+```
+
+Done, we have already configured our Bolt application with our Express server, now what remains is to create the Bolt `handlers` for the Slack requests. For this post we will only create the handler for the `Events` and we will add a simple event when a user joins a channel our application will publish a welcome message in the channel. Ok so we go to the `bolt/handlers/events.js` file and copy the following code
+
+```
+const events = (boltApp) => {
+  // When a user joins the team, send a message in a predefined channel asking them to introduce themselves
+  boltApp.event("member_joined_channel", async ({ event, client, logger }) => {
+    try {
+      logger.info("event info", event);
+      const result = await client.chat.postMessage({
+        channel: event.channel,
+        text: `Welcome to the team, <@${event.user}>! 🎉 You can introduce yourself in this channel.`,
+      });
+      logger.info("event result", result);
+    } catch (error) {
+      logger.error(error);
+    }
+  });
+};
+
+module.exports = events;
+```
+
+The next step is to import this file in the bolt/handlers/index.js file and call it, for that we copy the following code in that file. In case your Slack app does not only have events, but also has actions, commands, shortcuts, etc. In this file you should import them once they have been created.
+
+```
+const events = require("./events");
+
+const handlers = (boltApp) => {
+  events(boltApp);
+};
+
+module.exports = handlers;
+```
+
+Next we have to pass these handlers to our Bolt application to use them, for that we go to the bolt/index.js file and import the handlers into it, since they are imported we need to call the function and pass it our Bolt application
+
+```
+const { App } = require('@slack/bolt')
+const receiver = require("./receiver");
+const handlers = require("./handlers");
+
+const config = (expressApp) => {
+  const boltApp = new App({
+    receiver: receiver(expressApp),
+    token: process.env.SLACK_BOT_TOKEN,
+    appToken: process.env.SLACK_APP_TOKEN,
+  });
+
+  handlers(boltApp);
+};
+
+module.exports = { config };
 ```
