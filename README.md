@@ -132,7 +132,7 @@ app.listen(port, () => {
 });
 ```
 
-We are already passing our instance of Express to Bolt, now we need to tell Bolt to use this instance of Express to receive https requests instead of using the instance that uses its default framework, for that we will go to the file `bolt/receiver.js` in this file we will import from Bolt the ExpressReceiver function, once imported we will call it passing an object with the app property where its value is our instance of Express.
+We are already passing our instance of Express to Bolt, now we need to tell Bolt to use this instance of Express to receive https requests instead of using the instance that uses its default framework, for that we will go to the file `bolt/receiver.js` in this file we will import from Bolt the `ExpressReceiver` function, once imported we will call it passing an object with the `app` property where its value is our instance of Express.
 
 ```
 const { ExpressReceiver } = require('@slack/bolt')
