@@ -88,7 +88,13 @@ Then, we replicate the following structure for the bolt folder, please create th
 
 ![Screen Shot 2022-11-06 at 1 01 07 p m](https://user-images.githubusercontent.com/36525675/200189929-b9472035-328f-4b3f-b134-2695319cc02d.png)
 
-Once the files are created, we will also create a new file `.env` to store some necessary environment variables. Then copy the following variables into the new file
+Once the files are created, we will also create a new file `.env` to store some necessary environment variables. But first we need to install dotenv to be able to use environment variables on our server
+
+```
+npm install dotenv
+```
+
+After installation, then copy the following variables into the `.env` file
 
 ```
 SLACK_BOT_TOKEN=
@@ -96,7 +102,7 @@ SLACK_SIGNING_SECRET=
 SLACK_APP_TOKEN=
 ```
 
-Once the variables are created, we open the following `bolt/index.js` file and paste the following code. This code creates a new Bolt application which is what we need.
+Once the variables are created, we open the following `bolt/index.js` file and paste the following code. This code creates a new Bolt application which is what we need
 
 ```
 const { App } = require('@slack/bolt')
@@ -111,7 +117,7 @@ const config = (expressApp) => {
 module.exports = { config };
 ```
 
-Now we go to the `app.js` file and import the `bolt/index.js` file, once imported we call the config function to create and configure the Bolt application, we must also pass by arguments the instance of our Express.js server, this so that both use the same instance to have only one server and not have problems.
+Now we go to the `app.js` file and import the `bolt/index.js` file, once imported we call the config function to create and configure the Bolt application, we must also pass by arguments the instance of our Express.js server, this so that both use the same instance to have only one server and not have problems
 
 ```
 const express = require("express");
@@ -185,7 +191,7 @@ const events = (boltApp) => {
 module.exports = events;
 ```
 
-The next step is to import this file in the bolt/handlers/index.js file and call it, for that we copy the following code in that file. In case your Slack app does not only have events, but also has actions, commands, shortcuts, etc. In this file you should import them once they have been created.
+The next step is to import this file in the bolt/handlers/index.js file and call it, for that we copy the following code in that file. In case your Slack app does not only have events, but also has actions, commands, shortcuts, etc. In this file you should import them once they have been created
 
 ```
 const events = require("./events");
