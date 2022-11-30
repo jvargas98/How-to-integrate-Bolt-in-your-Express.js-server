@@ -2,7 +2,7 @@
 
 ## About
 
-In this post I will show you how to integrate the Bolt for JavaScript framework to your Express.js server to make your Slack application can coexist with your server, this to have both features of both frameworks in a single server.
+In this post I will show you how to integrate the Bolt framework for JavaScript in your Express.js server to make your Slack application can coexist with your Express.js server, this to have both features of both frameworks and also be able to handle your http requests from Slack and requests to your Express.js server on a single server.
 
 ## What is Bolt?
 Bolt is a foundational framework that makes it easier to build Slack apps with the platform's latest features.
@@ -21,7 +21,7 @@ As I mentioned Bolt for JavaScript is a Node.js framework just like Express.js. 
 
 ## Let's get started
 
-First we need to have an Express project, if you don't have one then let's create it, in case you already have one you can skip this step.
+First we need to have an Express project, if you don't have one then let's create it, in case you already have one you can skip this steps.
 
 ### Steps to create your Express server
 
@@ -67,14 +67,16 @@ Create a new script to start the server by adding the following line inside the 
 },
 ```
 
-Start your server to test that everything is OK. To start your server run the next command
+Ok, now we need to start the server to test that everything is OK. To start your server run the next command in the terminal
 
 ```
 npm run start
 ```
 
-If everything is ok you should see the following message
+If everything is OK you should see the following message
 `myapp is listening on port 3000`
+
+Now we have our Express server working correctly, the next step is to configure Bolt in our server, for that we follow the following steps
 
 ## Steps to setup Bolt in your Express.js server
 
@@ -258,5 +260,9 @@ We add our slack app to a channel and add a new person to the channel too and it
 And it also works if we make a request from the browser to the http://localhost:3000/
 
 ![Screen Shot 2022-11-06 at 3 05 41 p m](https://user-images.githubusercontent.com/36525675/200195137-178a4dcb-eafd-466d-ad66-fb2b358595f3.png)
+
+It looks like we are done, now our server can receive Slack requests and handle them and also be able to receive requests from outside.
+
+This is all for this post, now you can make the changes you need or add the features you need, this is just a very simple example to show how we can make a simple Bolt Integration, maybe is not the best option to have both servers in a single Node server, but this is a possible solution if you have this problem
 
 
